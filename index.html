@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lounaslista – Hertta & Orvokki</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f5f5f0;
+            color: #222;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #2e7d32;
+            color: #fff;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        header h1 { font-size: 1.5rem; font-weight: 700; }
+        header .updated {
+            font-size: 0.8rem;
+            opacity: 0.75;
+            margin-left: auto;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .restaurant {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            overflow: hidden;
+        }
+        .restaurant__header {
+            background: #388e3c;
+            color: #fff;
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .restaurant__name { font-size: 1.3rem; font-weight: 700; }
+        .restaurant__subtitle { font-size: 0.8rem; opacity: 0.85; margin-top: 0.2rem; }
+        .week-label {
+            background: rgba(255,255,255,.2);
+            padding: .2rem .6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+        .restaurant__link {
+            display: block;
+            text-align: right;
+            padding: .35rem 1.25rem;
+            font-size: 0.75rem;
+            color: #388e3c;
+            text-decoration: none;
+            background: #f1f8f1;
+            border-bottom: 1px solid #e0ede0;
+        }
+        .restaurant__link:hover { text-decoration: underline; }
+
+        .days { padding: .75rem 1.25rem 1.25rem; display: flex; flex-direction: column; gap: .75rem; }
+
+        .day {
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            padding: .75rem 1rem;
+            transition: border-color .15s;
+        }
+        .day--today {
+            border-color: #2e7d32;
+            background: #f1f8f1;
+        }
+
+        .day__name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: .4rem;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+        .day--today .day__name { color: #2e7d32; }
+
+        .today-badge {
+            background: #2e7d32;
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: .1rem .45rem;
+            border-radius: 20px;
+            letter-spacing: .03em;
+        }
+
+        .day__items p {
+            font-size: 0.82rem;
+            line-height: 1.5;
+            color: #333;
+            padding: .15rem 0;
+        }
+        .day__items p + p {
+            border-top: 1px dashed #eee;
+        }
+
+        .error { color: #c62828; font-size: 0.85rem; padding: 1rem 1.25rem; }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.75rem;
+            color: #888;
+        }
+        footer a { color: #888; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🍽️ Lounaslista</h1>
+        <span>Hertta &amp; Orvokki – Hervanta</span>
+        <span class="updated">Päivitetty 11.3.2026 klo 11:25</span>
+    </header>
+    <main>
+        
+    <section class="restaurant">
+        <div class="restaurant__header">
+            <div>
+                <h2 class="restaurant__name">Hertta</h2>
+                <p class="restaurant__subtitle">Hermiankatu 1, Hervanta</p>
+            </div>
+            <span class="week-label">Viikko 11</span>
+        </div>
+        <a class="restaurant__link" href="https://linkosuo.fi/toimipaikka/hertta/" target="_blank" rel="noopener">
+            Avaa Linkosuo.fi ↗
+        </a>
+        <div class="days">
+            
+        <div class="day">
+            <h3 class="day__name">Maanantai 09.03. </h3>
+            <div class="day__items"><p>Kaurapuuro & hillo M klo 7.45-9.30 á 2,30 €</p>
+<p>Naudanliha bao buns sticky seesami style M (sis. soija, seesami)</p>
+<p>Broilerin filettä tuhdissa harissa kastikkeessa & värikäs kurkuma-paprikariisi L, G (soija)</p>
+<p>Keitto: Tomaatti-valkopapukeitto & basilikaöljy M, G, VEG</p>
+<p>Chef´s menu: Kasvispyörykät puttanesca kastikkeessa, spagettia & parmesaania L, KASVIS (SAA VEG)</p></div>
+        </div>
+
+        <div class="day">
+            <h3 class="day__name">Tiistai 10.03. </h3>
+            <div class="day__items"><p>Aamieasta saatavilla klo 8-9.30  8.50e</p>
+<p>haudutettu ohrapuuro & hillo L klo 7.45-9.30 á 2,30 €</p>
+<p>Kokin Nacho-chipotle kuorrutettua broileria M, G & mausteinen salsa dippi L, G</p>
+<p>Bengalilainen juures- jalfrezi linsseillä & riisi M, G, VEG</p>
+<p>Keitto: Keväinen katkarapukeitto L, G</p>
+<p>Chef´s menu: Ylikypsää naudanrintaa, paahdettu valkosipulikastike & Chimichurri perunat L, G (sis.sinappi,possu)</p>
+<p>Jälkiruoaksi uuniomena rahka L, G (saa M,G,VEG sis.soija)</p></div>
+        </div>
+
+        <div class="day day--today">
+            <h3 class="day__name">Keskiviikko 11.03. <span class="today-badge">Tänään</span></h3>
+            <div class="day__items"><p>Mannapuuro & hillo klo 7.45-9.30 á 2,30 €</p>
+<p>KOREAN TEEMA</p>
+<p>Alkuun raikas marjashotti M,G,VEG</p>
+<p>Rapeat panko-paneroidut muikut M & inkivääri-ruohosipuli jogurttia</p>
+<p>Mureaa porsaankylkeä bullgogi kastikkeella M, G (soija, seesami)</p>
+<p>Keitto: Misokeitto tofulla, kasviksilla & riisinuudelilla M, G, VEG (sis. sieniä,soija,seesami)</p>
+<p>Chef´s menu: Broilerinfilettä Korean bbq- kastikkeessa, kimchi retikka-retiisiä & riisiä M (sis.soija,seesami)</p>
+<p>VEG ruoka keittiöstä: Tofua Korean BBQ kastikkeessa M, G, VEG</p></div>
+        </div>
+
+        <div class="day">
+            <h3 class="day__name">Torstai 12.03. </h3>
+            <div class="day__items"><p>Spelttipuuro & hillo L klo 7.45-9.30 á 2,30 €</p>
+<p>KOREAN TEEMA</p>
+<p>Tahmainen gochujang broileri & valkosipuli-seesami paahdetut perunat M, G (sis.soija)</p>
+<p>Pejeon eli katkarapu-kasvispannukakut & hoisin majoneesi M (kananmuna, sinappi)</p>
+<p>Keitto: Maapähkinäinen bataattisosekeitto M, G, VEG</p>
+<p>Chef´s menu: Pariloitua lohta Bibimbap tyyliin M, G (sis.soija)</p>
+<p>(sis. pariloitu lohi, etikka kurkut,paistettu riisi, Chili retikkaa,parsakaalia sekä teriyaki kastiketta)</p>
+<p>Jälkiruoaksi raikas mango- mustikka mousse M, G, VEG</p></div>
+        </div>
+
+        <div class="day">
+            <h3 class="day__name">Perjantai 13.03. </h3>
+            <div class="day__items"><p>Sadonkorjuupuuro pellavansiemenillä M klo 7.45-9.30 á 2,30 €</p>
+<p>Tortilla perjantai! Täytä tortillasi omaan tyyliin:</p>
+<p>Rapea kanaa, tulinen chili con carne naudan jauhelihasta, paprikainen kasvis seitan täyte.</p>
+<p>Lisukkeina tortillalettuja, tacotubseja, salsaa, cheddarkastikettta, guacamolea, vihanneksia</p>
+<p>Keitto: Seljanka- kasviskeitto M, G, VEG</p>
+<p>Chef´s menu: Puna-ahventa, hollandaisekastiketta, paahdettuja kasviksia & rucolaperunat G (kananmuna, selleri)</p>
+<p>Jälkiruoaksi: Marjainen omena-kaura paistos & vanilja kastike L (saa M,G,VEG)</p></div>
+        </div>
+        </div>
+    </section>
+
+    <section class="restaurant">
+        <div class="restaurant__header">
+            <div>
+                <h2 class="restaurant__name">Orvokki</h2>
+                <p class="restaurant__subtitle">Hermiankatu 6–8, Hervanta</p>
+            </div>
+            <span class="week-label">Viikko 11</span>
+        </div>
+        <a class="restaurant__link" href="https://linkosuo.fi/toimipaikka/lounasravintola-orvokki/" target="_blank" rel="noopener">
+            Avaa Linkosuo.fi ↗
+        </a>
+        <div class="days">
+            
+        <div class="day">
+            <h3 class="day__name">Maanantai 09.03. </h3>
+            <div class="day__items"><p>Orvokki X Korea!</p>
+<p>Yangnyemon – Broileria Korealaisittain M,G</p>
+<p>Seesampossua, mausteista riisiä ja kananmunia M,G</p>
+<p>Kermainen palsternakkasosekeitto L,G</p>
+<p>Päivän vegaani: Tofua ja kasviksia Yangnyemon-kastikkeessa VEG,G</p></div>
+        </div>
+
+        <div class="day">
+            <h3 class="day__name">Tiistai 10.03. </h3>
+            <div class="day__items"><p>Orvokki X Korea!</p>
+<p>Korean burgerit M (keittiöstä gluteeniton burger ja dippi)</p>
+<p>– 100% naudanlihapihviä, mustapippuri-soijamajoneesia, kimchicoleslawia ja pihvitomaattia</p>
+<p>– uuniranskalaiset ja seesam-chilidippi M</p>
+<p>Mausteinen kasvis-nuudelivuoka härkismurulla VEG,G</p>
+<p>Hunajainen kalkkunakeitto M,G</p></div>
+        </div>
+
+        <div class="day day--today">
+            <h3 class="day__name">Keskiviikko 11.03. <span class="today-badge">Tänään</span></h3>
+            <div class="day__items"><p>Chicken schnitzel M,G</p>
+<p>– perunamuusia L,G ja Big mac majoneesia M,G</p>
+<p>Punajuuri-vuohenjuustolasagne L</p>
+<p>Lehtikaalikeitto L,G</p>
+<p>– keitetyt kananmunat</p></div>
+        </div>
+
+        <div class="day">
+            <h3 class="day__name">Torstai 12.03. </h3>
+            <div class="day__items"><p>Possun luuttomat BBQ-ribsit M,G</p>
+<p>– pippuridippi L,G</p>
+<p>Lihapyörykät parmesan-tomaattikastikkeessa VL (saa myös M,G)</p>
+<p>Kasvishernekeitto M,G</p>
+<p>– pannukakkua, hilloa ja kermavaahtoa</p>
+<p>Päivän vegaani: Kasvispihvit ja tomaattidippi VEG,G</p></div>
+        </div>
+
+        <div class="day">
+            <h3 class="day__name">Perjantai 13.03. </h3>
+            <div class="day__items"><p>Texas Peten broileria cheddarjuustolla L,G</p>
+<p>Kebab-paprikapannu M,G</p>
+<p>– valkosipulijogurttikastike L,G</p>
+<p>Linssikeitto tuoreella basilikalla VEG,G</p>
+<p>Päivän vegaani: Seitan-paprikapannu VEG</p></div>
+        </div>
+        </div>
+    </section>
+    </main>
+    <footer>
+        Tiedot haettu automaattisesti sivuilta
+        <a href="https://linkosuo.fi" target="_blank" rel="noopener">linkosuo.fi</a>.
+        Lähdekoodi:
+        <a href="https://github.com/agent-tk/lounaslista" target="_blank" rel="noopener">
+            github.com/agent-tk/lounaslista
+        </a>
+    </footer>
+</body>
+</html>
