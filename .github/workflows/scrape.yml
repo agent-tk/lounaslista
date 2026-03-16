@@ -2,9 +2,12 @@ name: Scrape & publish lunch menus
 
 on:
   schedule:
-    # Run Mon–Fri at 07:00 Helsinki time (= 05:00 UTC, or 04:00 UTC in summer)
-    # We use 04:00 UTC to cover both winter (UTC+2) and summer (UTC+3) time
+    # Primary: Mon–Fri at 07:00 Helsinki time (= 04:00 UTC in summer, 05:00 in winter)
     - cron: "0 4 * * 1-5"
+    # Backup 1: 06:00 UTC — in case the primary run is skipped by GitHub's scheduler
+    - cron: "0 6 * * 1-5"
+    # Backup 2: 08:00 UTC — last-resort safety net
+    - cron: "0 8 * * 1-5"
   workflow_dispatch: # Allow manual trigger from GitHub UI
 
 permissions:
