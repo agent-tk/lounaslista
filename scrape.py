@@ -7,6 +7,7 @@ from __future__ import annotations
 import datetime
 import re
 from dataclasses import dataclass, field
+from zoneinfo import ZoneInfo
 
 import requests
 from bs4 import BeautifulSoup
@@ -105,32 +106,23 @@ def scrape_menu(restaurant: dict[str, str]) -> RestaurantMenu:
     return result
 
 
-def today_weekday_fi() -> str:
-    """Return today's Finnish weekday name prefix for highlighting."""
-    names = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai"]
-    return names[datetime.date.today().weekday()]
-
-
-def render_day_card(day: DayMenu, today: str) -> str:
-    is_today = day.day.startswith(today)
-    highlight = ' day--today' if is_today else ''
-    today_badge = '<span class="today-badge">Tänään</span>' if is_today else ''
+def render_day_card(day: DayMenu) -> str:
     lines = [f"<p>{line}</p>" for line in day.items.splitlines() if line.strip()]
     items_html = "\n".join(lines)
     return f"""
-        <div class="day{highlight}">
-            <h3 class="day__name">{day.day} {today_badge}</h3>
+        <div class="day" data-day="{day.day}">
+            <h3 class="day__name">{day.day}</h3>
             <div class="day__items">{items_html}</div>
         </div>"""
 
 
-def render_restaurant(menu: RestaurantMenu, today: str) -> str:
+def render_restaurant(menu: RestaurantMenu) -> str:
     if menu.error:
         body = f'<p class="error">Virhe haettaessa ruokalistaa: {menu.error}</p>'
     elif not menu.days:
         body = '<p class="error">Ruokalistaa ei löydy tälle viikolle.</p>'
     else:
-        body = "\n".join(render_day_card(d, today) for d in menu.days)
+        body = "\n".join(render_day_card(d) for d in menu.days)
 
     week_label = f'<span class="week-label">{menu.week}</span>' if menu.week else ""
     return f"""
@@ -152,10 +144,9 @@ def render_restaurant(menu: RestaurantMenu, today: str) -> str:
 
 
 def render_html(menus: list[RestaurantMenu]) -> str:
-    now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=2)))
+    now = datetime.datetime.now(ZoneInfo("Europe/Helsinki"))
     updated = now.strftime("%-d.%-m.%Y klo %H:%M")
-    today = today_weekday_fi()
-    restaurants_html = "\n".join(render_restaurant(m, today) for m in menus)
+    restaurants_html = "\n".join(render_restaurant(m) for m in menus)
 
     return f"""<!DOCTYPE html>
 <html lang="fi">
@@ -305,6 +296,26 @@ def render_html(menus: list[RestaurantMenu]) -> str:
             github.com/agent-tk/lounaslista
         </a>
     </footer>
+    <script>
+        // Highlight today's menu card in the browser so it's always correct
+        // regardless of when the page was last generated.
+        (function () {{
+            var DAYS = ["Sunnuntai","Maanantai","Tiistai","Keskiviikko","Torstai","Perjantai","Lauantai"];
+            var todayPrefix = DAYS[new Date().getDay()];
+            document.querySelectorAll(".day").forEach(function (el) {{
+                if ((el.dataset.day || "").startsWith(todayPrefix)) {{
+                    el.classList.add("day--today");
+                    var h3 = el.querySelector(".day__name");
+                    if (h3) {{
+                        var badge = document.createElement("span");
+                        badge.className = "today-badge";
+                        badge.textContent = "Tänään";
+                        h3.appendChild(badge);
+                    }}
+                }}
+            }});
+        }})();
+    </script>
 </body>
 </html>"""
 
