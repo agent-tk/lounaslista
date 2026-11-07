@@ -1,5 +1,6 @@
 """
-Scrapes weekly lunch menus from two Linkosuo restaurants and generates index.html.
+Scrapes weekly lunch menus (Linkosuo Hertta & Orvokki, Caffitella Duo Tampere)
+and generates index.html.
 """
 
 from __future__ import annotations
@@ -23,7 +24,26 @@ RESTAURANTS = [
         "subtitle": "Hermiankatu 6–8, Hervanta",
         "url": "https://linkosuo.fi/toimipaikka/lounasravintola-orvokki/",
     },
+    {
+        "name": "Caffitella Duo",
+        "subtitle": "Kauppakeskus Duo, Hervanta",
+        "url": "https://www.caffitella.fi/lounaslista/",
+        "source": "caffitella",
+        "match": "Duo",
+        "link_label": "Avaa Caffitella.fi ↗",
+    },
 ]
+
+WEEKDAYS = [
+    "maanantai", "tiistai", "keskiviikko", "torstai",
+    "perjantai", "lauantai", "sunnuntai",
+]
+DAY_RE = re.compile(r"^(" + "|".join(WEEKDAYS) + r")\b\W*(.*)$", re.I)
+BLOCK_TAGS = {
+    "p", "div", "li", "ul", "ol", "br", "tr", "td", "table", "section",
+    "h1", "h2", "h3", "h4", "h5", "h6", "figure", "blockquote",
+}
+HEADING_TAGS = ["h1", "h2", "h3", "h4"]
 
 HEADERS = {
     "User-Agent": (
@@ -44,12 +64,113 @@ class RestaurantMenu:
     name: str
     subtitle: str
     url: str
+    link_label: str = "Avaa Linkosuo.fi ↗"
     week: str = ""
     days: list[DayMenu] = field(default_factory=list)
     error: str = ""
 
 
 def scrape_menu(restaurant: dict[str, str]) -> RestaurantMenu:
+    if restaurant.get("source") == "caffitella":
+        return scrape_caffitella(restaurant)
+    return scrape_linkosuo(restaurant)
+
+
+def _section_lines(heading) -> list[str]:
+    """Text lines from everything after `heading` up to the next heading of the
+    same or higher level (works regardless of how the content is nested)."""
+    level = int(heading.name[1])
+    stop = {f"h{i}" for i in range(1, level + 1)}
+    parts: list[str] = []
+    for el in heading.next_elements:
+        name = getattr(el, "name", None)
+        if name:
+            if name in stop or name == "footer":
+                break
+            if name in BLOCK_TAGS:
+                parts.append("\n")
+        elif el.parent is not None and el.parent.name not in ("script", "style"):
+            if type(el).__name__ == "NavigableString":
+                parts.append(str(el))
+    lines = []
+    for line in "".join(parts).split("\n"):
+        line = re.sub(r"\s+", " ", line).strip()
+        if line:
+            lines.append(line)
+    return lines
+
+
+def parse_caffitella(html: str, match: str) -> tuple[str, list[DayMenu], str]:
+    """Return (week label, days, error) for the Caffitella list whose heading
+    contains `match` (e.g. "Duo")."""
+    soup = BeautifulSoup(html, "html.parser")
+    heading = None
+    for h in soup.find_all(HEADING_TAGS):
+        if match.lower() in h.get_text(" ", strip=True).lower():
+            heading = h
+            break
+    if heading is None:
+        return "", [], f"Listaa, jossa mainitaan {match}, ei löydy"
+
+    lines = _section_lines(heading)
+    preamble: list[str] = []
+    days: list[DayMenu] = []
+    day_name, items = "", []
+
+    def flush() -> None:
+        if day_name:
+            days.append(DayMenu(day=day_name, items="\n".join(items)))
+
+    for line in lines:
+        m = DAY_RE.match(line)
+        if m:
+            flush()
+            rest = m.group(2).strip()
+            day_name = m.group(1).capitalize()
+            items = []
+            # "MAANANTAI 3.11." -> date belongs to the label; anything longer is a dish
+            if rest and re.fullmatch(r"[\d.\s–-]+", rest):
+                day_name = f"{day_name} {rest}"
+            elif rest:
+                items.append(rest)
+        elif day_name:
+            items.append(line)
+        else:
+            preamble.append(line)
+    flush()
+
+    intro = " ".join(preamble)
+    week = ""
+    wm = re.search(r"(?:vko|viikko)\.?\s*(\d{1,2})", intro, re.I)
+    if wm:
+        week = f"Viikko {wm.group(1)}"
+    else:
+        dm = re.search(r"\d{1,2}\.?\s*[–-]\s*\d{1,2}\.\d{1,2}\.?", intro)
+        if dm:
+            week = dm.group(0)
+    return week, days, ""
+
+
+def scrape_caffitella(restaurant: dict[str, str]) -> RestaurantMenu:
+    result = RestaurantMenu(
+        name=restaurant["name"],
+        subtitle=restaurant["subtitle"],
+        url=restaurant["url"],
+        link_label=restaurant.get("link_label", "Avaa sivusto ↗"),
+    )
+    try:
+        resp = requests.get(restaurant["url"], headers=HEADERS, timeout=15)
+        resp.raise_for_status()
+        resp.encoding = resp.apparent_encoding or "utf-8"
+        result.week, result.days, result.error = parse_caffitella(
+            resp.text, restaurant.get("match", "Duo")
+        )
+    except Exception as exc:
+        result.error = str(exc)
+    return result
+
+
+def scrape_linkosuo(restaurant: dict[str, str]) -> RestaurantMenu:
     result = RestaurantMenu(
         name=restaurant["name"],
         subtitle=restaurant["subtitle"],
@@ -135,7 +256,7 @@ def render_restaurant(menu: RestaurantMenu) -> str:
             {week_label}
         </div>
         <a class="restaurant__link" href="{menu.url}" target="_blank" rel="noopener">
-            Avaa Linkosuo.fi ↗
+            {menu.link_label}
         </a>
         <div class="days">
             {body}
@@ -153,7 +274,7 @@ def render_html(menus: list[RestaurantMenu]) -> str:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lounaslista – Hertta & Orvokki</title>
+    <title>Lounaslista – Hertta, Orvokki & Duo</title>
     <style>
         *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
 
@@ -282,7 +403,7 @@ def render_html(menus: list[RestaurantMenu]) -> str:
 <body>
     <header>
         <h1>🍽️ Lounaslista</h1>
-        <span>Hertta &amp; Orvokki – Hervanta</span>
+        <span>Hertta, Orvokki &amp; Caffitella Duo – Hervanta</span>
         <span class="updated">Päivitetty {updated}</span>
     </header>
     <main>
@@ -290,7 +411,8 @@ def render_html(menus: list[RestaurantMenu]) -> str:
     </main>
     <footer>
         Tiedot haettu automaattisesti sivuilta
-        <a href="https://linkosuo.fi" target="_blank" rel="noopener">linkosuo.fi</a>.
+        <a href="https://linkosuo.fi" target="_blank" rel="noopener">linkosuo.fi</a> ja
+        <a href="https://www.caffitella.fi/lounaslista/" target="_blank" rel="noopener">caffitella.fi</a>.
         Lähdekoodi:
         <a href="https://github.com/agent-tk/lounaslista" target="_blank" rel="noopener">
             github.com/agent-tk/lounaslista
