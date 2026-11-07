@@ -122,6 +122,9 @@ def parse_caffitella(html: str, match: str) -> tuple[str, list[DayMenu], str]:
             days.append(DayMenu(day=day_name, items="\n".join(items)))
 
     for line in lines:
+        # The allergen legend ("G = gluteeniton | ...") marks the end of the list
+        if day_name and re.search(r"\b[GLM]\s*=\s*\w", line):
+            break
         m = DAY_RE.match(line)
         if m:
             flush()
