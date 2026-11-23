@@ -2,16 +2,20 @@ name: Scrape & publish lunch menus
 
 on:
   schedule:
-    # Primary: Mon–Fri at 07:00 Helsinki time (= 04:00 UTC in summer, 05:00 in winter)
-    - cron: "0 4 * * 1-5"
-    # Backup 1: 06:00 UTC — in case the primary run is skipped by GitHub's scheduler
-    - cron: "0 6 * * 1-5"
-    # Backup 2: 08:00 UTC — last-resort safety net
-    - cron: "0 8 * * 1-5"
-  workflow_dispatch: # Allow manual trigger from GitHub UI
+    # GitHub starts scheduled runs late (often by hours, worst at the top of
+    # the hour), so run every two hours at an off-peak minute. Each run first
+    # checks whether index.html is already fresh (needs_refresh.py) and stops
+    # early if so; the scrape repeats only while a list is missing or old.
+    # Sunday runs pick up next week's lists before Monday morning.
+    - cron: "41 */2 * * 0-5"
+  workflow_dispatch: # Manual trigger from GitHub UI always scrapes
 
 permissions:
   contents: write # needed to push index.html back to the repo
+
+concurrency:
+  group: scrape
+  cancel-in-progress: false
 
 jobs:
   scrape:
@@ -20,19 +24,32 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Check whether the menu needs refreshing
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "refresh=true" >> "$GITHUB_OUTPUT"
+          else
+            python3 needs_refresh.py index.html >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set up Python
+        if: steps.check.outputs.refresh == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
           cache: pip
 
       - name: Install dependencies
+        if: steps.check.outputs.refresh == 'true'
         run: pip install -r requirements.txt
 
       - name: Scrape menus and generate index.html
+        if: steps.check.outputs.refresh == 'true'
         run: python scrape.py
 
       - name: Commit and push index.html
+        if: steps.check.outputs.refresh == 'true'
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
