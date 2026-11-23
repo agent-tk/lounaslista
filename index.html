@@ -118,6 +118,31 @@
             border-top: 1px dashed #eee;
         }
 
+        .stale-alert {
+            max-width: 1200px;
+            margin: 1.5rem auto 0;
+            padding: 0 1rem;
+        }
+        .stale-alert > div {
+            background: #fff3e0;
+            border: 2px solid #ef6c00;
+            border-left-width: 6px;
+            border-radius: 8px;
+            padding: .9rem 1.1rem;
+            color: #5d2c00;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .stale-alert strong { display: block; font-size: 1rem; color: #bf360c; }
+        .stale-note {
+            background: #fff3e0;
+            color: #bf360c;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: .4rem 1.25rem;
+            border-bottom: 1px solid #ffcc80;
+        }
+
         .error { color: #c62828; font-size: 0.85rem; padding: 1rem 1.25rem; }
 
         footer {
@@ -129,138 +154,140 @@
         footer a { color: #888; }
     </style>
 </head>
-<body>
+<body data-generated="2026-11-23T13:07:31+02:00">
     <header>
         <h1>🍽️ Lounaslista</h1>
         <span>Hertta, Orvokki &amp; Caffitella Duo – Hervanta</span>
-        <span class="updated">Päivitetty 20.11.2026 klo 18:40</span>
+        <span class="updated">Päivitetty 23.11.2026 klo 13:07</span>
     </header>
+    <div class="stale-alert" id="stale-alert" role="alert" hidden></div>
     <main>
         
-    <section class="restaurant">
+    <section class="restaurant" data-name="Hertta" data-week="48">
         <div class="restaurant__header">
             <div>
                 <h2 class="restaurant__name">Hertta</h2>
                 <p class="restaurant__subtitle">Hermiankatu 1, Hervanta</p>
             </div>
-            <span class="week-label">Viikko 47</span>
+            <span class="week-label">Viikko 48</span>
         </div>
         <a class="restaurant__link" href="https://linkosuo.fi/toimipaikka/hertta/" target="_blank" rel="noopener">
             Avaa Linkosuo.fi ↗
         </a>
         <div class="days">
             
-        <div class="day" data-day="Maanantai 16.11.">
-            <h3 class="day__name">Maanantai 16.11.</h3>
-            <div class="day__items"><p>Rapeaa tempura paneroitua turskaa remoulade dipillä M</p>
-<p>karamelisoidulla sipulilla viimeisteltyä juustopasta paistosta L, KASVIS</p>
-<p>Kasvis-tofu tandoori keittiöstä M,G,VEG</p>
-<p>Keitto: Kermainen purjo-palsternakka keitto L,G</p>
-<p>Chef: Pitkään haudutettua Broileria tandoorikastikkeessa, aromaattista riisiä sekä jugurtti-kurkku raita L,G</p></div>
+        <div class="day" data-day="Maanantai 23.11.">
+            <h3 class="day__name">Maanantai 23.11.</h3>
+            <div class="day__items"><p>Lempeää mango-kookos broileria M, G</p>
+<p>Tomaattinen juures ratatouille herneproteiinilla M, G, VEG</p>
+<p>Keitto: Täyteläisen kermaista metsäsienikeittoa L, G</p>
+<p>Chef´s menu: Puna-ahventa sitruunaisella risonipastalla sekä yrtti-tomaattisalsalla L</p>
+<p>Jälkiruoaksi piparkakkurahkaa L</p></div>
         </div>
 
-        <div class="day" data-day="Tiistai 17.11.">
-            <h3 class="day__name">Tiistai 17.11.</h3>
-            <div class="day__items"><p>Blackened broileria tumman makeassa kirsikkakastikeessa M, G</p>
-<p>Lempeän täyteläistä Tofu Palak paneer pataa L, G, KASVIS</p>
-<p>Keitto: Inkiväärinen linssikeitto M, G, VEG</p>
-<p>Chef´s menu: Kokin naudan pannupihviä, kermaista sipulikastiketta & paahdettua perunaa L</p></div>
+        <div class="day" data-day="Tiistai 24.11.">
+            <h3 class="day__name">Tiistai 24.11.</h3>
+            <div class="day__items"><p>Korealaista makean mausteista Char Siu possua M</p>
+<p>Värikäs kasvis- nuudeli stir fry M, VEG</p>
+<p>Keitto: kermainen maissi chowder L, G, KASVIS</p>
+<p>Chef: Broilerinfilettä kermaisessa pesto-kastikkeessa, paahdettua perunaa ja porkkanaa L, G</p>
+<p>Jälkiruoaksi Talon mokkapaloja L</p></div>
         </div>
 
-        <div class="day" data-day="Keskiviikko 18.11.">
-            <h3 class="day__name">Keskiviikko 18.11.</h3>
-            <div class="day__items"><p>Possunniskaa Baskilaisittain M, G</p>
-<p>Gratinoidut kasvispihvit aurinkokuivatulla tomaatilla & ananaksella L, G, KASVIS (SAA VEG keittiöstä!)</p>
-<p>Keitto: täyteläinen punajuuri-porkkanakeitto M, G, VEG</p></div>
+        <div class="day" data-day="Keskiviikko 25.11.">
+            <h3 class="day__name">Keskiviikko 25.11.</h3>
+            <div class="day__items"><p>Täyteläisen juustoista broileria L, G</p>
+<p>Tulinen kasvis- tortillavuoka seitanilla sekä jalapenoilla M, VEG</p>
+<p>Keitto: Karamellioitua sipulikeittoa L, G</p>
+<p>Chef: Porsaan lehtipihviä, Chipotle maustevoi jaröstiperunat L, G</p>
+<p>Jälkiruoaksi: Raikas hedelmäsalaatti</p></div>
         </div>
 
-        <div class="day" data-day="Torstai 19.11.">
-            <h3 class="day__name">Torstai 19.11.</h3>
-            <div class="day__items"><p>Tapolan mustaa makkaraa ja puolukkasurvosta M</p>
-<p>Myskikurpitsa-kaalipaistos fetamurulla L, G, KASVIS (saa m,g,veg)</p>
-<p>– perunamuusia  L, G (saa m,g,veg)</p>
-<p>Keitto: Hernekeittoa palvikinkulla M, G ja pannukakkua ja hilloa</p>
-<p>Chef`s menu: Kanaburgeri paholaisenhillolla, punasipulilla ja ranskanperunoilla M</p></div>
+        <div class="day" data-day="Torstai 26.11.">
+            <h3 class="day__name">Torstai 26.11.</h3>
+            <div class="day__items"><p>Linkosuon konditorian herkkuja maistatuksessa tänään klo 12-13.30. Tervetuloa!</p>
+<p>Alaskanseiti filettä rapealla täysjyväpaneroinnilla M</p>
+<p>Kermaisen paprikaista pepperonipastaa L</p>
+<p>Keitto: Mausteinen tomaattikeitto M, G, VEG</p>
+<p>Chef: Pähkinäistä Kung Pao broileria riisillä M, G</p></div>
         </div>
 
-        <div class="day" data-day="Perjantai 20.11.">
-            <h3 class="day__name">Perjantai 20.11.</h3>
-            <div class="day__items"><p>Aromaattista Marrakesh broileria M, G</p>
-<p>Juustoinen kahden kalan vuoka lohella ja puna-ahvenella L, G</p>
-<p>Keitto: Samettista Juuressosekeittoa M, G, VEG</p>
-<p>Chef: LASTEN PERJANTAI Lihapulla- & nakkikori ranskalaisilla, kasvistikkuja, jugurttidippiä ja majoneesia</p>
-<p>Jälkiruoaksi: Lettubuffet, kermavaahtoa, hilloa sekä suklaakastiketta L</p></div>
+        <div class="day" data-day="Perjantai 27.11.">
+            <h3 class="day__name">Perjantai 27.11.</h3>
+            <div class="day__items"><p>BLACK FRIDAY TARJOUS: Buffetlounas 10 €</p>
+<p>Lihamureketta tummalla pippurikastikkeella M, G</p>
+<p>BBQ paahdettuja broilerin koipinuijia M, G</p>
+<p>Keitto: Kookos-porkkanakeitto M, G, VEG</p>
+<p>Chef: Fish & chips burgeri L 13,80 €</p></div>
         </div>
         </div>
     </section>
 
-    <section class="restaurant">
+    <section class="restaurant" data-name="Orvokki" data-week="48">
         <div class="restaurant__header">
             <div>
                 <h2 class="restaurant__name">Orvokki</h2>
                 <p class="restaurant__subtitle">Hermiankatu 6–8, Hervanta</p>
             </div>
-            <span class="week-label">Viikko 47</span>
+            <span class="week-label">Viikko 48</span>
         </div>
         <a class="restaurant__link" href="https://linkosuo.fi/toimipaikka/lounasravintola-orvokki/" target="_blank" rel="noopener">
             Avaa Linkosuo.fi ↗
         </a>
         <div class="days">
             
-        <div class="day" data-day="Maanantai 16.11.">
-            <h3 class="day__name">Maanantai 16.11.</h3>
-            <div class="day__items"><p>Valkosipuli-yrttivoilla täytetyt Kievin kanapyörykät L,G</p>
-<p>– ranch-dippi L,G ja Espanjalaiset patatas bravas-perunat M,G</p>
-<p>Kimchi-edamamenuudelit VEG,G</p>
-<p>Pekoni-sienikeitto L,G</p></div>
+        <div class="day" data-day="Maanantai 23.11.">
+            <h3 class="day__name">Maanantai 23.11.</h3>
+            <div class="day__items"><p>Mureaa possua pippurikastikkeessa L,G</p>
+<p>– perunamuusia L,G</p>
+<p>Ahvenanmaan kalapihvit M,G</p>
+<p>– sitruunainen ruohosipulijogurtti L,G</p>
+<p>Samettinen juuressosekeitto L,G</p></div>
         </div>
 
-        <div class="day" data-day="Tiistai 17.11.">
-            <h3 class="day__name">Tiistai 17.11.</h3>
-            <div class="day__items"><p>Chipotle-omenaglaseeratut possun luuttomat ribsit M,G</p>
-<p>– savujuustoperunat L,G</p>
-<p>Mexican-kasvispihvit VEG,G</p>
-<p>– curry-ananasdippi M,G</p>
-<p>Purjo-perunasosekeitto L,G</p></div>
+        <div class="day" data-day="Tiistai 24.11.">
+            <h3 class="day__name">Tiistai 24.11.</h3>
+            <div class="day__items"><p>Tomaatti-parmesanbroileria L,G</p>
+<p>Perinteinen pyttipannu paistetuilla munilla M,G</p>
+<p>Tulinen juustokeitto L,G</p></div>
         </div>
 
-        <div class="day" data-day="Keskiviikko 18.11.">
-            <h3 class="day__name">Keskiviikko 18.11.</h3>
-            <div class="day__items"><p>Pannulla paistetut rapeat kanaleikkeet M, G</p>
-<p>– persilja-parmesanlohkoperunat L,G ja paprikamajoneesi M,G</p>
-<p>Chili con carne M,G</p>
-<p>– riisiä VEG,G</p>
-<p>Perinteinen pinaattikeitto ja keitetyt kananmunat L,G</p>
-<p>Kahvin kanssa Orvokin omenapiirakkaa M ja vaniljavaahtoa L,G</p></div>
+        <div class="day" data-day="Keskiviikko 25.11.">
+            <h3 class="day__name">Keskiviikko 25.11.</h3>
+            <div class="day__items"><p>Chorizopullat savupaprikakastikkeessa M,G</p>
+<p>Orvokin oma: Voissa paistetut pinaattiletut L</p>
+<p>– puolukkasurvos VEG</p>
+<p>Vegeborssikeitto VEG,G</p>
+<p>Kahvin kanssa omena-kanelirahkaa L,G</p></div>
         </div>
 
-        <div class="day" data-day="Torstai 19.11.">
-            <h3 class="day__name">Torstai 19.11.</h3>
-            <div class="day__items"><p>Pulled pork burgerit bourbon whiskey BBQ-majoneesilla ja Monterey Jack-juustolla L</p>
-<p>– mustapippuriketsuppia VEG,G</p>
-<p>Broileria Piri Piri M,G HOT!</p>
-<p>– jogurttikastike L,G</p>
-<p>Itämainen bataattikeitto VEG,G</p></div>
+        <div class="day" data-day="Torstai 26.11.">
+            <h3 class="day__name">Torstai 26.11.</h3>
+            <div class="day__items"><p>Linkosuon konditorian herkkuja maistatuksessa tänään klo 12.00-13.30. Tervetuloa!</p>
+<p>Kananpojan paneroitua paistileikettä M,G</p>
+<p>– currymajoneesia M,G</p>
+<p>Mehevä kasvislasagne L</p>
+<p>Kermainen kalakeitto L,G</p></div>
         </div>
 
-        <div class="day" data-day="Perjantai 20.11.">
-            <h3 class="day__name">Perjantai 20.11.</h3>
-            <div class="day__items"><p>Rapeat kalapihvit M, G</p>
-<p>– uuniranskalaiset VEG,G ja tartarkastike M,G</p>
-<p>Jauhelihapizza L</p>
-<p>Juustoinen kasvissosekeitto L,G</p>
-<p>Kahvin kanssa Orvokin jäätelöbuffet</p></div>
+        <div class="day" data-day="Perjantai 27.11.">
+            <h3 class="day__name">Perjantai 27.11.</h3>
+            <div class="day__items"><p>Black fridayn tarjouksena buffetlounas 10€!</p>
+<p>Uunimakkara kaikilla mausteilla L,G</p>
+<p>– smetanainen perunamuusi L,G</p>
+<p>Buffalokanapasta L</p>
+<p>Linssikeittoa ja tuoretta korianteria VEG,G</p></div>
         </div>
         </div>
     </section>
 
-    <section class="restaurant">
+    <section class="restaurant" data-name="Caffitella Duo" data-week="48">
         <div class="restaurant__header">
             <div>
                 <h2 class="restaurant__name">Caffitella Duo</h2>
                 <p class="restaurant__subtitle">Kauppakeskus Duo, Hervanta</p>
             </div>
-            <span class="week-label">Viikko 47</span>
+            <span class="week-label">Viikko 48</span>
         </div>
         <a class="restaurant__link" href="https://www.caffitella.fi/lounaslista/" target="_blank" rel="noopener">
             Avaa Caffitella.fi ↗
@@ -269,54 +296,54 @@
             
         <div class="day" data-day="Maanantai">
             <h3 class="day__name">Maanantai</h3>
-            <div class="day__items"><p>Pannupihvi sipuli-kermakastikkeessa (G,L) (suomalaista nautaa ja possua)</p>
-<p>BBQ-broileria (G,M) (suomalaista broileria)</p>
-<p>Paahdettua perunaa (G,M) & riisiä (G,M)</p>
+            <div class="day__items"><p>Parmesanbroileria (G,L) (suomalaista broileria)</p>
+<p>Kaalikääryleet & puolukkahillo (G,M) (suomalaista nautaa ja possua)</p>
+<p>Perunamuusia (G,L)</p>
 <p>Salaattibuffet</p>
-<p>Broiler burger (L) Tofu poke (G,VE) (Annosruoka ei sis. buffettiin)</p></div>
+<p>Paprika burger (L) Halloumi salaatti (G,L) (annosruoka ei sis. buffettiin)</p></div>
         </div>
 
         <div class="day" data-day="Tiistai">
             <h3 class="day__name">Tiistai</h3>
-            <div class="day__items"><p>Ylikypsää possua omenaisessa kastikkeessa (G,L) (suomalaista possua)</p>
-<p>Yrtti-valkosipulibroileria (G,L) (suomalaista broileria)</p>
-<p>Pariisinperunoita (G,M)</p>
+            <div class="day__items"><p>Paneroitua porsaanleikettä (L) & rosmariini-kermaviilikastike (L,G) (suomalaista possua)</p>
+<p>Chorizopyöryköitä tomaatti-kermakastikkeessa (G,L) (suomalaista nautaa ja possua)</p>
+<p>Pariisinperunoita (G,M) Kasvissosekeitto (G,L)</p>
 <p>Salaattibuffet</p>
-<p>Chicken & fries (L) Halloumi poke (G,L) (Annosruoka ei sis. buffettiin)</p></div>
+<p>Yrttibroileri burger (L) Vuohenjuusto poke (G,L) (annosruoka ei sis. buffettiin)</p></div>
         </div>
 
         <div class="day" data-day="Keskiviikko">
             <h3 class="day__name">Keskiviikko</h3>
-            <div class="day__items"><p>Lihapullia pippurikermakastikkeessa (G,L) (suomalaista nautaa ja possua)</p>
-<p>Savulohivuokaa (G,L) (suomalaista kirjolohta)</p>
-<p>Paahdettua perunaa (G,M)</p>
+            <div class="day__items"><p>Korean BBQ -possua (G,M) (suomalaista possua)</p>
+<p>Wings (G,M) & buffalo-majoneesi (M,G) (suomalaista broileria)</p>
+<p>Yrttiperunaa (G,M) & riisiä (G,M)</p>
 <p>Salaattibuffet</p>
-<p>Aioli burger (L) Tofu salaatti (G,VE) (Annosruoka ei sis. buffettiin)</p></div>
+<p>Halloumi burger (L) Burger salaatti (G,L) (annosruoka ei sis. buffettiin)</p></div>
         </div>
 
         <div class="day" data-day="Torstai">
             <h3 class="day__name">Torstai</h3>
-            <div class="day__items"><p>Sitruuna-smetanabroileria (G,L) (suomalaista broileria)</p>
-<p>Caffitellan kebabia (G,M) (suomalaista nautaa)</p>
-<p>Lohkoperunoita (G,M) & riisiä (G,M)</p>
+            <div class="day__items"><p>Lasagnea (L) (suomalaista nautaa ja possua)</p>
+<p>Broileria sweet chili -kasviksilla (G,M) (suomalaista broileria)</p>
+<p>Riisiä (G,M)</p>
 <p>Salaattibuffet</p>
-<p>Vuohenjuusto burger (L) Teriyaki poke (G,M) (Annosruoka ei sis. buffettiin)</p></div>
+<p>Tofu salaatti (G,VE) Paneroitu broileri poke (L) (annosruoka ei sis. buffettiin)</p></div>
         </div>
 
         <div class="day" data-day="Perjantai">
             <h3 class="day__name">Perjantai</h3>
-            <div class="day__items"><p>Smetanainen liharuukku (G,L)</p>
-<p>Juustoista uunimakkaraa (G,L) (suomalaista possua)</p>
+            <div class="day__items"><p>Smetanainen uunilohi (G,L)</p>
+<p>Makkaramix (G,L) (suomalaista possua)</p>
 <p>Perunamuusia (G,L)</p>
 <p>Salaattibuffet</p>
-<p>Pekoni smash burger (L) (Annosruoka ei sis. buffettiin)</p></div>
+<p>Kanaburger (L) (annosruoka ei sis. buffettiin)</p></div>
         </div>
 
         <div class="day" data-day="Lauantai">
             <h3 class="day__name">Lauantai</h3>
-            <div class="day__items"><p>Kievin kanaa (L) + valkosipuli-yrttidippi (L,G)(suomalaista broileria)</p>
-<p>Chorizo-lihapullia (G,L) (suomalaista nautaa ja possua)</p>
-<p>Kermaperunaa (G,L)</p>
+            <div class="day__items"><p>Lihamureketta pippurikastikkeessa (G,L) (suomalaista nautaa ja possua)</p>
+<p>Crispy chicken nuggets (L) & parmesanmajoneesi (L,G) (suomalaista broileria)</p>
+<p>Juustokermaperunaa (G,L)</p>
 <p>Salaattibuffet</p></div>
         </div>
         </div>
@@ -349,6 +376,57 @@
                     }
                 }
             });
+        })();
+
+        // Warn when the list is not for the current week: either the page has
+        // not been regenerated yet this week, or a restaurant has not published
+        // its new list. Weekends are skipped (last week's list is expected).
+        (function () {
+            function isoWeek(d) {
+                var t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+                var day = t.getUTCDay() || 7;
+                t.setUTCDate(t.getUTCDate() + 4 - day);
+                var jan1 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+                return Math.ceil(((t - jan1) / 864e5 + 1) / 7);
+            }
+            var now = new Date();
+            var dow = now.getDay();
+            if (dow === 0 || dow === 6) return;
+            var current = isoWeek(now);
+            var next = isoWeek(new Date(now.getTime() + 7 * 864e5));
+            var generated = new Date(document.body.dataset.generated);
+            var pageOld = !isNaN(generated) &&
+                (now - generated > 7 * 864e5 || isoWeek(generated) !== current);
+            var stale = [];
+            document.querySelectorAll(".restaurant").forEach(function (el) {
+                var w = parseInt(el.dataset.week, 10);
+                var old = w ? (w !== current && w !== next) : pageOld;
+                if (!old) return;
+                stale.push(el.dataset.name);
+                // "Tänään" would point at last week's food
+                el.querySelectorAll(".day--today").forEach(function (d) {
+                    d.classList.remove("day--today");
+                    var badge = d.querySelector(".today-badge");
+                    if (badge) badge.remove();
+                });
+                var note = document.createElement("div");
+                note.className = "stale-note";
+                note.textContent = w
+                    ? "⚠️ Viikon " + w + " lista – tämän viikon listaa ei ole vielä haettu"
+                    : "⚠️ Lista voi olla vanha";
+                var header = el.querySelector(".restaurant__header");
+                header.parentNode.insertBefore(note, header.nextSibling);
+            });
+            if (!stale.length) return;
+            var box = document.getElementById("stale-alert");
+            var updated = document.querySelector(".updated");
+            box.innerHTML =
+                "<div><strong>⚠️ Ruokalista ei ole ajan tasalla (nyt viikko " + current + ")</strong>" +
+                "Vanha lista: " + stale.join(", ") + ". " +
+                (updated ? updated.textContent + ". " : "") +
+                "Sivu päivittyy automaattisesti, kun uusi lista on haettu. " +
+                "Tarkista tämän päivän lounas ravintolan omalta sivulta.</div>";
+            box.hidden = false;
         })();
     </script>
 </body>
