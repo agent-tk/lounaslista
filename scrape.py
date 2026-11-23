@@ -70,6 +70,25 @@ class RestaurantMenu:
     error: str = ""
 
 
+def week_number(label: str, today: datetime.date) -> int | None:
+    """ISO week number from a label like "Viikko 47", "vko 47" or "17.–21.11."."""
+    m = re.search(r"(?:viikko|vko)\.?\s*(\d{1,2})", label, re.I)
+    if m:
+        return int(m.group(1))
+    m = re.search(r"(\d{1,2})\.(\d{1,2})\.?\s*$", label.strip())
+    if m:
+        day, month = int(m.group(1)), int(m.group(2))
+        year = today.year
+        # A December list read in January belongs to the previous year
+        if month == 12 and today.month == 1:
+            year -= 1
+        try:
+            return datetime.date(year, month, day).isocalendar().week
+        except ValueError:
+            return None
+    return None
+
+
 def scrape_menu(restaurant: dict[str, str]) -> RestaurantMenu:
     if restaurant.get("source") == "caffitella":
         return scrape_caffitella(restaurant)
@@ -240,7 +259,7 @@ def render_day_card(day: DayMenu) -> str:
         </div>"""
 
 
-def render_restaurant(menu: RestaurantMenu) -> str:
+def render_restaurant(menu: RestaurantMenu, today: datetime.date) -> str:
     if menu.error:
         body = f'<p class="error">Virhe haettaessa ruokalistaa: {menu.error}</p>'
     elif not menu.days:
@@ -249,8 +268,10 @@ def render_restaurant(menu: RestaurantMenu) -> str:
         body = "\n".join(render_day_card(d) for d in menu.days)
 
     week_label = f'<span class="week-label">{menu.week}</span>' if menu.week else ""
+    week = week_number(menu.week, today) if menu.days and not menu.error else None
+    week_attr = f' data-week="{week}"' if week else ""
     return f"""
-    <section class="restaurant">
+    <section class="restaurant" data-name="{menu.name}"{week_attr}>
         <div class="restaurant__header">
             <div>
                 <h2 class="restaurant__name">{menu.name}</h2>
@@ -270,7 +291,7 @@ def render_restaurant(menu: RestaurantMenu) -> str:
 def render_html(menus: list[RestaurantMenu]) -> str:
     now = datetime.datetime.now(ZoneInfo("Europe/Helsinki"))
     updated = now.strftime("%-d.%-m.%Y klo %H:%M")
-    restaurants_html = "\n".join(render_restaurant(m) for m in menus)
+    restaurants_html = "\n".join(render_restaurant(m, now.date()) for m in menus)
 
     return f"""<!DOCTYPE html>
 <html lang="fi">
@@ -392,6 +413,31 @@ def render_html(menus: list[RestaurantMenu]) -> str:
             border-top: 1px dashed #eee;
         }}
 
+        .stale-alert {{
+            max-width: 1200px;
+            margin: 1.5rem auto 0;
+            padding: 0 1rem;
+        }}
+        .stale-alert > div {{
+            background: #fff3e0;
+            border: 2px solid #ef6c00;
+            border-left-width: 6px;
+            border-radius: 8px;
+            padding: .9rem 1.1rem;
+            color: #5d2c00;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }}
+        .stale-alert strong {{ display: block; font-size: 1rem; color: #bf360c; }}
+        .stale-note {{
+            background: #fff3e0;
+            color: #bf360c;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: .4rem 1.25rem;
+            border-bottom: 1px solid #ffcc80;
+        }}
+
         .error {{ color: #c62828; font-size: 0.85rem; padding: 1rem 1.25rem; }}
 
         footer {{
@@ -403,12 +449,13 @@ def render_html(menus: list[RestaurantMenu]) -> str:
         footer a {{ color: #888; }}
     </style>
 </head>
-<body>
+<body data-generated="{now.isoformat(timespec="seconds")}">
     <header>
         <h1>🍽️ Lounaslista</h1>
         <span>Hertta, Orvokki &amp; Caffitella Duo – Hervanta</span>
         <span class="updated">Päivitetty {updated}</span>
     </header>
+    <div class="stale-alert" id="stale-alert" role="alert" hidden></div>
     <main>
         {restaurants_html}
     </main>
@@ -439,6 +486,57 @@ def render_html(menus: list[RestaurantMenu]) -> str:
                     }}
                 }}
             }});
+        }})();
+
+        // Warn when the list is not for the current week: either the page has
+        // not been regenerated yet this week, or a restaurant has not published
+        // its new list. Weekends are skipped (last week's list is expected).
+        (function () {{
+            function isoWeek(d) {{
+                var t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+                var day = t.getUTCDay() || 7;
+                t.setUTCDate(t.getUTCDate() + 4 - day);
+                var jan1 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+                return Math.ceil(((t - jan1) / 864e5 + 1) / 7);
+            }}
+            var now = new Date();
+            var dow = now.getDay();
+            if (dow === 0 || dow === 6) return;
+            var current = isoWeek(now);
+            var next = isoWeek(new Date(now.getTime() + 7 * 864e5));
+            var generated = new Date(document.body.dataset.generated);
+            var pageOld = !isNaN(generated) &&
+                (now - generated > 7 * 864e5 || isoWeek(generated) !== current);
+            var stale = [];
+            document.querySelectorAll(".restaurant").forEach(function (el) {{
+                var w = parseInt(el.dataset.week, 10);
+                var old = w ? (w !== current && w !== next) : pageOld;
+                if (!old) return;
+                stale.push(el.dataset.name);
+                // "Tänään" would point at last week's food
+                el.querySelectorAll(".day--today").forEach(function (d) {{
+                    d.classList.remove("day--today");
+                    var badge = d.querySelector(".today-badge");
+                    if (badge) badge.remove();
+                }});
+                var note = document.createElement("div");
+                note.className = "stale-note";
+                note.textContent = w
+                    ? "⚠️ Viikon " + w + " lista – tämän viikon listaa ei ole vielä haettu"
+                    : "⚠️ Lista voi olla vanha";
+                var header = el.querySelector(".restaurant__header");
+                header.parentNode.insertBefore(note, header.nextSibling);
+            }});
+            if (!stale.length) return;
+            var box = document.getElementById("stale-alert");
+            var updated = document.querySelector(".updated");
+            box.innerHTML =
+                "<div><strong>⚠️ Ruokalista ei ole ajan tasalla (nyt viikko " + current + ")</strong>" +
+                "Vanha lista: " + stale.join(", ") + ". " +
+                (updated ? updated.textContent + ". " : "") +
+                "Sivu päivittyy automaattisesti, kun uusi lista on haettu. " +
+                "Tarkista tämän päivän lounas ravintolan omalta sivulta.</div>";
+            box.hidden = false;
         }})();
     </script>
 </body>
